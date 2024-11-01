@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CivicComplaints</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <%= link_to 'Civic Complaints', root_path, class: 'nav-link' %>
+        </div>
+        <div class="nav-links">
+          <% if user_signed_in? %>
+            <% if current_user.authority? %>
+              <%= link_to 'Dashboard', authority_dashboard_path, class: 'nav-link' %>
+              <%= link_to 'All Complaints', complaints_path, class: 'nav-link' %>
+            <% elsif current_user.normal_user? %>
+              <%= link_to 'Dashboard', normal_user_dashboard_path, class: 'nav-link' %>
+              <%= link_to 'Register Complaint', new_complaint_path, class: 'nav-link' %>
+            <% end %>
+            <%= button_to "Logout", destroy_user_session_path, method: :delete %>
+          <% else %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container main-content">
+      <% if notice %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; <%= Time.current.year %> Civic Complaints. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

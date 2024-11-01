@@ -1,0 +1,6 @@
+<h1>Welcome, <%= @user.email %></h1>
+
+<%= link_to 'Create Complaint', new_complaint_path, class: 'tab' %>
+<%= link_to 'My Complaint', normal_user_complaints_path, class: 'tab'%>
+<%= link_to 'Edit Profile', edit_normal_user_profile_path, class: 'tab'%>
+<%= link_to 'Your Profile', normal_user_profile_path, class: 'tab'%>

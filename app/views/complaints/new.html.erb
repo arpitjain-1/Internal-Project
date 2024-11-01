@@ -1,0 +1,36 @@
+<%= form_with(model: @complaint, local: true) do |form| %>
+  <% if @complaint.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@complaint.errors.count, "error") %> prohibited this complaint from being saved:</h2>
+
+      <ul>
+        <% @complaint.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Complaint Type Field -->
+  <div class="field">
+    <%= form.label :complaint_type_id, 'Complaint Type' %>
+    <%= form.collection_select :complaint_type_id, ComplaintType.all, :id, :name, prompt: "Select Complaint Type" %>
+  </div>
+
+  <!-- Description Field -->
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <!-- Proof Image Field -->
+  <div class="field">
+    <%= form.label :proof_image %>
+    <%= form.file_field :proof_image %>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

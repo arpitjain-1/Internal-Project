@@ -1,0 +1,26 @@
+<h2>Pending Complaints</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Complaint Type</th>
+      <th>Description</th>
+      <th>Submitted By</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pending_complaints.each do |complaint| %>
+      <tr>
+        <td><%= complaint.complaint_type.name %></td>
+        <td><%= complaint.description %></td>
+        <td><%= complaint.user.email %></td>
+        <td><%= complaint.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @pending_complaints.empty? %>
+  <p>No pending complaints to review at the moment.</p>
+<% end %>

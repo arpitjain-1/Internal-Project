@@ -1,0 +1,2 @@
+module NormalUserHelper
+end

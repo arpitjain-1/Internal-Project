@@ -1,0 +1,33 @@
+<h1>Your Complaints</h1>
+
+<% if @complaints.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @complaints.each do |complaint| %>
+        <tr>
+          <td><%= complaint.complaint_type.name %></td>
+          <td><%= complaint.description %></td>
+          <td><%= complaint.status %></td>
+          <td><%= complaint.created_at.strftime('%Y-%m-%d') %></td>
+          <td>
+            <%= link_to 'View', complaint_path(complaint), class: "btn btn-info" %>
+            <%= link_to 'Edit', edit_complaint_path(complaint), class: "btn btn-warning" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>You have not submitted any complaints yet.</p>
+<% end %>
+
+<%= link_to 'Submit New Complaint', new_complaint_path, class: "btn btn-primary" %>

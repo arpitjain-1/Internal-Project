@@ -1,0 +1,100 @@
+<h2>All Complaints</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Complaint Type</th> 
+      <th>Description</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @complaints.each do |complaint| %>
+      <tr>
+        <td><%= complaint.complaint_type.name %></td>
+        <td><%= complaint.description %></td>
+        <td class="status"><%= complaint.status %></td>
+        <td>
+          <%= form_with model: complaint, url: resolve_complaint_path(complaint), method: :put, local: true do |form| %>
+            <%= form.hidden_field :status, value: "Resolved" %>
+            <%= form.submit 'Resolve', class: 'btn btn-success', disabled: complaint.status != 'pending' %>
+          <% end %>
+
+          <%= form_with model: complaint, url: reject_complaint_path(complaint), method: :put, local: true do |form| %>
+            <%= form.hidden_field :status, value: "Rejected" %>
+            <%= form.submit 'Reject', class: 'btn btn-danger', disabled: complaint.status != 'pending' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  // Select all resolve and reject buttons
+  let resButtons = document.querySelectorAll(".resolve-btn");
+  let rejButtons = document.querySelectorAll(".reject-btn");
+
+  // Event listener for resolve buttons
+  resButtons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+      event.preventDefault();  // Prevent the default link behavior
+
+      // Extract the complaint ID from the data-complaint_id attribute
+      let complaintId = this.getAttribute('data-complaint_id');
+      let statusCell = this.closest('tr').querySelector('.status');  // Locate the status cell in the row
+
+      // Send the PUT request using fetch to update the complaint's status to "Resolved"
+      fetch(`/complaints/${complaintId}/resolve`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'Resolved' })  // Send the updated status in the request body
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          statusCell.textContent = "Resolved";  // Update the status in the UI
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);  // Handle any errors
+      });
+    });
+  });
+
+  // Event listener for reject buttons
+  rejButtons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+      event.preventDefault();  // Prevent default behavior
+
+      let complaintId = this.getAttribute('data-complaint_id');
+      let statusCell = this.closest('tr').querySelector('.status');
+
+      // Send PUT request to reject the complaint
+      fetch(`/complaints/${complaintId}/reject`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'Rejected' })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          statusCell.textContent = "Rejected";  // Update the status in the UI
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+});
+
+</script>

@@ -1,0 +1,7 @@
+<h1>Welcome <%= @user.email%></h1>
+<div class="tabs">
+  <%= link_to 'All Complaints', complaints_path, class: 'tab' %>
+  <%= link_to 'Pending Complaints', pending_complaints_path, class: 'tab' %>
+  <%= link_to 'Profile', authority_profile_path, class: 'tab' %>
+  <%= link_to 'Edit Profile', edit_authority_profile_path, class: 'tab' %>
+</div>
